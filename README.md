@@ -22,10 +22,10 @@ The options:
 
 - -n : Number of states
 
-- -m : Choose mode. Supported: full, hic
-
 - -o : Output dir
 
 - -g : Genome bin file
 
 - --prev : reload existing model
+
+- --save : save model
