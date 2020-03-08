@@ -5,6 +5,7 @@ import struct
 import matplotlib
 from scipy.sparse import csr_matrix
 from scipy.special import logsumexp
+from scipy.stats import multivariate_normal
 import pandas as pd
 import struct
 import pickle
@@ -74,6 +75,13 @@ def sparse_logsumexp(m):
 def sparse_logsumexp_row(m):
     return logsumexp(m.toarray(),axis=0)
 
+def get_multi_normal_pdf(mean, cov, data, log=True):
+    multi_normal = multivariate_normal(mean=mean, cov=cov, allow_singular=True)
+    if log:
+        return multi_normal.logpdf(data)
+    else:
+        return multi_normal.pdf(data)
+
 # Modified from straw: https://github.com/theaidenlab/straw
 def get_hic_chr(file):
     # print(file)
@@ -132,8 +140,7 @@ def print_log(text, file_name):
     outfile = open(file_name, "a+")
     outfile.write(text + "\n")
     outfile.close()
-
-
+    
 
 def juicer_dump(juicer, type, norm_method, hic_file, chr1, chr2, resolution, output):
     print("Running juicer tools dump:")

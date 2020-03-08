@@ -47,8 +47,13 @@ class MarkovRandomField:
         label = gmm_model.predict(self.obs)
         label_prob = gmm_model.predict_proba(self.obs)
         self.label = label
-        self.label_prob = util.log_transform(label_prob)
-        self.gaussian = util.log_transform(label_prob)
+        
+        self.label_prob = np.zeros(shape=label_prob.shape)
+        for i in range(self.n_state):
+            self.label_prob[:,i] = util.get_multi_normal_pdf(gmm_model.means_[i,:],gmm_model.covariances_[i,:,:], self.obs)
+        
+        #self.label_prob = util.log_transform(label_prob)
+        self.gaussian = self.label_prob.copy()
 
     def init_trans(self):
         # trans_matrix = np.ones((self.n_state, self.n_state))
@@ -142,11 +147,16 @@ class MarkovRandomField:
             estimate_label = np.array(np.argmax(posterior, axis=1))
             target = csr_matrix(np.transpose(self.gaussian)).dot(self.edges_matrix).dot(label_prev)
             
-            clf = GaussianNB()
-            clf.fit(self.obs, estimate_label)
-            self.gaussian = clf.predict_log_proba(self.obs)
+            #clf = GaussianNB()
+            #clf.fit(self.obs, estimate_label)
+            #self.gaussian = clf.predict_log_proba(self.obs)
+            self.gaussian = np.zeros(shape=self.gaussian.shape)
+            for i in range(self.n_state):
+                #self.gaussian[:,i] = util.get_multi_normal_pdf(gmm_model.means_[i,:],gmm_model.covariances_[i,:,:], self.obs)
+                data = self.obs[estimate_label==i]
 
-            target = 1
+                if len(data)>0:
+                    self.gaussian[:,i] = util.get_multi_normal_pdf(np.mean(data, axis=0),np.cov(data, rowvar=0), self.obs)
             
             label_one_hot = csr_matrix((np.ones(self.n), (estimate_label, np.arange(self.n))), shape=(self.n_state, self.n))
             label_one_hot_t = np.transpose(label_one_hot)
