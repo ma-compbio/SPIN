@@ -104,7 +104,7 @@ class MarkovRandomField:
         self.last = []
         for i in range(max_iter):
 
-            belief_new = csr_matrix((np.transpose(self.label_prob))) + message.dot(t)
+            belief_new = csr_matrix((np.transpose(self.gaussian))) + message.dot(t)
             #normalization
             belief = csr_matrix(belief_new - util.sparse_logsumexp_row(belief_new))
             #print(logsumexp(belief_new))
