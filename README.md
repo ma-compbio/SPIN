@@ -39,4 +39,4 @@ The options:
 
 Example:
 
-`python main.py -i input_chr1.txt --hic Hi-C_chr1.txt -w 25000 -n 5 -m <mode> -o example_chr1 -g bin_chr1.bed --save`
+`python main.py -i input_chr1.txt --hic Hi-C_chr1.txt -w 25000 -n 5 -o example_chr1 -g bin_chr1.bed --save`
