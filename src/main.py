@@ -40,7 +40,6 @@ def run(args):
         os.makedirs(args.o)
         print("Create output dir: %s" % args.o)
     else:
-        # print("Existing output dir: %s" % (args.o))
         sys.exit("Error: Output dir %s already exits." % args.o)
 
     util.print_log(time.ctime() + " Start running.", args.o + "/log.txt")
@@ -64,14 +63,11 @@ def run(args):
 
     # Create Hi-C Matrix
     (n, d) = input_data.shape
-    # print(n, d)
     edges = util.create_hic_matrix(args.hic, n)
     util.print_log(time.ctime() + " Finished creating edges.", args.o + "/log.txt")
 
     # Create graph
     hmrf = mrf.MarkovRandomField(n=n, edges=edges, obs=input_data,args=args)
-    #util.print_log("Number of nodes %d." % hmrf.get_n(), args.o + "/log.txt")
-    #util.print_log("Number of edges %d." % hmrf.get_edges(), args.o + "/log.txt")
     hmrf.init_gmm()
     print(hmrf.label)
 
@@ -80,6 +76,7 @@ def run(args):
     util.print_log(time.ctime() + " Init trans matrix.", args.o + "/log.txt")
     print(hmrf.edge_potential)
     
+    # inference of states
     hmrf.solve()
     
     # Save file
@@ -101,5 +98,4 @@ if __name__ == '__main__':
     # End.
     end = time.time()
     util.print_log("Total running time: %.2f s." % (end - start), args.o + "/log.txt")
-
-    # read_data()
+    
