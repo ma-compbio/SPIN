@@ -12,6 +12,7 @@ SPIN requires the following Python packages to be installed:
 
 [Juicer tools](https://github.com/aidenlab/juicer/wiki/Juicer-Tools-Quick-Start) is required to extract Hi-C data from [.hic files](https://github.com/aidenlab/juicer/wiki/Pre). Requires Java Runtime Engine  installed on your file system.
 
+
 ## Usage
 
 After install all dependencies, run the following python command:
@@ -52,8 +53,7 @@ The options:
 - -o \<output_path\> : Output path.
 
 - -g \<genome_bin\>: Genomic coordinates of each bin. `genome_bin` file should be a tab-separated text file where the first three columns are the genomic coordinates of each bin and the fourth column is the index number (starting from zero). For example (header not included):
-
-| chr    | start  |  end   | index number |
+| chr    | start  |  end   |index number|
 |--------|--------|--------|----------|
 |chr1    |0       |25000   |0         |
 |chr1    |25000   |50000   |1         |
@@ -66,7 +66,12 @@ The options:
 
 - --save : (opitional) Save curent model to .pkl file.
 
-
 Example:
 
 `python main.py -i input_chr1.txt --hic Hi-C_chr1.txt -w 25000 -n 5 -m <mode> -o example_chr1 -g bin_chr1.bed --save`
+
+Predicted states `state_n` can be found under `output_path` folder. To convert the results to bed format:
+
+`merge2bed.sh genome_bin_file state_n output.bed`
+
+
