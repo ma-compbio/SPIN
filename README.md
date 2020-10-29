@@ -52,7 +52,8 @@ The options:
 - -o \<output_path\> : Output path.
 
 - -g \<genome_bin\>: Genomic coordinates of each bin. `genome_bin` file should be a tab-separated text file where the first three columns are the genomic coordinates of each bin and the fourth column is the index number (starting from zero). For example (header not included):
-| chr    | start  |  end   |index number|
+
+| chr    | start  |  end   | index number |
 |--------|--------|--------|----------|
 |chr1    |0       |25000   |0         |
 |chr1    |25000   |50000   |1         |
