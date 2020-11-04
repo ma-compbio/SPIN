@@ -10,8 +10,17 @@ import pandas as pd
 import struct
 import pickle
 
-# Read from text
 def iter_loadtxt(filename, delimiter='\t', skiprows=0, dtype=float):
+    """ Read from text line by line.
+    
+    Args:
+        skiprows (int): Skip the first $skiprows rows.
+        dtype: Data type of loaded data. Default: float.
+    
+    Returns:
+        data: Numpy array of loaded data.
+        
+    """
     def iter_func():
         with open(filename, 'r') as infile:
             for _ in range(skiprows):
@@ -26,69 +35,90 @@ def iter_loadtxt(filename, delimiter='\t', skiprows=0, dtype=float):
     data = data.reshape((-1, iter_loadtxt.rowlength))
     return data
 
-# Read from text/table
+
 def read_file(file):
+    """ Load data with numpy.genfromtxt. """
     data = np.genfromtxt(file, dtype=None, encoding=None)
     return data
 
 
-# Read bedgraph format data.
 def readBedGraph(file):
+    """ Read bedgraph format data. """
     data = np.genfromtxt(file, dtype=None, encoding=None)
     return data
 
-# read input data
 def readData(file):
+    """ Read input data (no missing data). """
     data = np.loadtxt(file)
     return data
 
-# read hi-c/interaction input
 def readHiC(file):
+    """ Read hi-c/interaction input. """
     # data = iter_loadtxt((file)
     # hic_data = np.loadtxt(args.hic)
     # hic_data = util.iter_loadtxt(args.hic)
     data = pd.read_csv(file, delimiter="\t").values
 
     return data
-
-# create hi-c input matrix, consider upper-left/lower-right case
-def create_hic_matrix(hic_input, n, weight=False):
+ 
+def create_hic_matrix(hic_input, n):
+    """ Create hi-c input matrix, consider upper-left/lower-right case. 
+        
+    Args:
+        hic_input (str): File name of hi-c input file.
+        n (int) : Number of nodes/bins.
+    Returns:
+        hic_data_merge: Numpy array of hi-c interaction data.
+        
+    """
     hic_data = readHiC(hic_input)
     #hic_data = hic_data[hic_data[:,0]<hic_data[:,1]]
     hic_data_swap = hic_data.copy()
     hic_data_swap[:,[0, 1]] = hic_data_swap[:,[1, 0]]
     hic_data_merge = np.concatenate((hic_data, hic_data_swap), axis=0)
-    #if weight:
-    #    hic_matrix = csr_matrix((hic_data[:, 2], (hic_data[:, 0], hic_data[:, 1])), shape=(n, n))
-    #else:
-    #    hic_matrix = csr_matrix((np.ones(np.size(hic_data,0)), (hic_data[:, 0], hic_data[:, 1])), shape=(n, n))
-    #print(edges.toarray()[1:20, 1:20])
 
     return hic_data_merge
 
-# log transform of data
 def log_transform(data, pseudocount=1e-100):
-    #pseudocount = 1e-10
+    """ log transform of data. 
+    
+    Args:
+        data : Numpy array.
+        pseudocount : pseudocount to avoid divide by 0.
+    Returns:
+        Numpy array of log transformed data.
+        
+    """
     return np.log(data + pseudocount)
 
-# Calculate the log of the sum of exponentials 
 def sparse_logsumexp(m):
+    """ Calculate the log of the sum of exponentials. """
     return logsumexp(m.toarray())
 
-# Calculate the log of the sum of exponentials for row
 def sparse_logsumexp_row(m):
+    """ Calculate the log of the sum of exponentials for row. """
     return logsumexp(m.toarray(),axis=0)
 
-# Get Multivariate normal distribution pdf
 def get_multi_normal_pdf(mean, cov, data, log=True):
+    """ Get Multivariate normal distribution pdf. 
+    
+    Args:
+        mean : Numpy array of mean.
+        cov : Numpy array of covariance.
+        data : Numpy array of data points.
+        log : Return pdf in log space. Default: True.
+        
+    Returns:
+        Multivariate normal distribution pdf.
+    """
     multi_normal = multivariate_normal(mean=mean, cov=cov, allow_singular=True)
     if log:
         return multi_normal.logpdf(data)
     else:
         return multi_normal.pdf(data)
 
-# Modified from straw: https://github.com/theaidenlab/straw
 def get_hic_chr(file):
+    """ Get chromosome list from .hic file. Modified from straw: https://github.com/theaidenlab/straw. """
     # print(file)
 
     hic_file = open(file, 'rb')
@@ -98,6 +128,7 @@ def get_hic_chr(file):
     print('HiC version:')
     print('  {0}'.format(str(version)))
 
+    """ Genome version """
     masterindex = struct.unpack('<q', hic_file.read(8))[0]
     genome = ""
     c = hic_file.read(1)
@@ -108,7 +139,7 @@ def get_hic_chr(file):
     print('Genome ID:')
     print('  {0}'.format(str(genome)))
 
-    # read and throw away attribute dictionary (stats+graphs)
+    """ read and throw away attribute dictionary (stats+graphs) """
     # print('Attribute dictionary:')
     nattributes = struct.unpack('<i', hic_file.read(4))[0]
     for x in range(0, nattributes):
@@ -116,7 +147,8 @@ def get_hic_chr(file):
         value = readcstr(hic_file)
     nChrs = struct.unpack('<i', hic_file.read(4))[0]
     print("Chromosomes: ")
-
+    
+    """ get chromosome list """
     chr_list = np.array([])
 
     for x in range(0, nChrs):
@@ -134,20 +166,40 @@ def get_hic_chr(file):
 
     return chr_list_new
 
-# save model/variable to pickle file
 def save_variable(variable, output_name):
+    """ Save model/variable to pickle file.
+    
+    Args:
+        variable : Name of variable to save.
+        output_name : Name of saved file.
+        
+    """
     outfile = open(output_name, "wb")
     pickle.dump(variable, outfile)
     outfile.close()
 
-# print text to log file
+
 def print_log(text, file_name):
+    """ Print text to log file. """
     outfile = open(file_name, "a+")
     outfile.write(text + "\n")
     outfile.close()
     
-# Extract data from .hic files
+
 def juicer_dump(juicer, type, norm_method, hic_file, chr1, chr2, resolution, output):
+    """ Extract data from .hic files. 
+        
+    Args:
+        juicer : Path to juicer tools.
+        type : Type of data to extract. Should be "observed" or "oe".
+        norm_method: Normalization method to use.
+        hic_file : Path to .hic file.
+        chr1 : Name of chrmosome 1.
+        chr2 : Name of chrmosome 2.
+        resolution : Hi-C resolution to use.
+        output :  Path to output file.
+    
+    """
     print("Running juicer tools dump:")
     command = "java -jar " + juicer + " dump " + type + " " + norm_method + " " + hic_file + " " \
               + chr1 + " " + chr2 + " BP " + str(resolution) + " " + output
@@ -158,8 +210,18 @@ def juicer_dump(juicer, type, norm_method, hic_file, chr1, chr2, resolution, out
     return
 
 
-# Add bin number to hic interactions
 def hic_add_bin_num(hic_file, chr1, chr2, genomic_bin_file, bin_size, output):
+    """ Add bin number to hic interactions.
+            
+    Args:
+        hic_file : Path to Hi-C interaction file.
+        chr1 : Name of chrmosome 1.
+        chr2 : Name of chrmosome 2.
+        genomic_bin_file : Path to genomic bin file. 4th column should be bin number.
+        bin_size : Bin size to use.
+        output :  Path to output file.
+    
+    """ 
     bins = readGenomicBin(genomic_bin_file)
     hic = np.genfromtxt(hic_file, dtype=None, encoding=None)
     # colnames_bins = bins.dtype.names
@@ -178,6 +240,7 @@ def hic_add_bin_num(hic_file, chr1, chr2, genomic_bin_file, bin_size, output):
 
     f_handle = open(output, 'wb')
 
+    """ Write to file. """ 
     n = 0
     for (start1, start2, interaction) in hic:
         if (chr1, start1) in bin_dict and (chr2, start2) in bin_dict and (not np.isnan(interaction)):
@@ -195,8 +258,20 @@ def hic_add_bin_num(hic_file, chr1, chr2, genomic_bin_file, bin_size, output):
 
     return
 
-# Save hic interactions in requested region.
 def plot_oe_matrix(hic_file, chr1, chr2, start1, end1, start2, end2, output):
+    """ Save hic interactions in requested region. 
+    
+    Args:
+        hic_file : Path to Hi-C interaction file.
+        chr1 : Name of chrmosome for region 1.
+        chr2 : Name of chrmosome for region 2.
+        start1 : Start of region 1.
+        end1 : End of region 1.
+        start2 : Start of region 2.
+        end2 : End of region 2.
+        output :  Path to output file.
+    
+    """ 
     hic = np.genfromtxt(hic_file, dtype=None, encoding=None)
     matrix = np.zeros((end1 - start1 + 1, end2 - start2 + 1))
 
@@ -212,8 +287,18 @@ def plot_oe_matrix(hic_file, chr1, chr2, start1, end1, start2, end2, output):
     np.savetxt(output + ".tmp", matrix, delimiter='\t', fmt='%s')
 
 
-# Dump all hic interactions.
 def dump_hic_all(juicer, hic_file, chr_list, genomic_bin_file, resolution, output):
+    """ Dump all hic interactions. 
+    
+    Args:
+        juicer : Path to juicer tools.
+        hic_file : Path to .hic file.
+        chr_list : List of chrmosomes to dump.
+        genomic_bin_file : Path to genomic bin file. 
+        resolution : Hi-C resolution to use.
+        output :  Path to output file.
+    
+    """ 
     if not os.path.isdir(output):
         os.makedirs(output)
     else:

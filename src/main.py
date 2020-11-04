@@ -29,6 +29,7 @@ def parse_arg():
     p.add_argument("--save", help="save model.", action='store_true')
     # p.add_argument('-j', help="Juicer tools dir.")
 
+    # missing arguments
     if len(sys.argv) < 5:
         p.print_help()
         exit(1)
@@ -36,6 +37,7 @@ def parse_arg():
 
 def run(args):
     
+    # create output folder
     if not os.path.isdir(args.o):
         os.makedirs(args.o)
         print("Create output dir: %s" % args.o)
@@ -57,20 +59,17 @@ def run(args):
     input_data = util.readData(args.i)
     util.print_log(time.ctime() + " Finished reading input.", args.o + "/log.txt")
 
-    # Read Hi-C
-    #hic_data = util.readHiC(args.hic)
-    #util.print_log(time.ctime() + " Finished reading Hi-C.", args.o + "/log.txt")
-
     # Create Hi-C Matrix
     (n, d) = input_data.shape
     edges = util.create_hic_matrix(args.hic, n)
     util.print_log(time.ctime() + " Finished creating edges.", args.o + "/log.txt")
 
-    # Create graph
+    # Create graph object
     hmrf = mrf.MarkovRandomField(n=n, edges=edges, obs=input_data,args=args)
+    
+    # initialization
     hmrf.init_gmm()
     print(hmrf.label)
-
     util.print_log(time.ctime() + " Init GMM.", args.o + "/log.txt")
     hmrf.init_trans()
     util.print_log(time.ctime() + " Init trans matrix.", args.o + "/log.txt")
