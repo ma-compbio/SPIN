@@ -1,5 +1,5 @@
 # SPIN
-SPIN - Spatial Position Inference of the Nuclear genome.
+SPIN (Spatial Position Inference of the Nuclear genome) is a integrative computational method to identify genome-wide chromosome localization patterns relative to multiple nuclearcompartments using TSA-seq, DamID, and Hi-C data. 
 
 ## Required Packages
 SPIN requires the following Python packages to be installed:
@@ -53,7 +53,6 @@ The options:
 - -o \<output_path\> : Output path.
 
 - -g \<genome_bin\>: Genomic coordinates of each bin. `genome_bin` file should be a tab-separated text file where the first three columns are the genomic coordinates of each bin and the fourth column is the index number (starting from zero). For example (header not included):
-
 | chr    | start  |  end   |index number|
 |--------|--------|--------|----------|
 |chr1    |0       |25000   |0         |
@@ -75,4 +74,23 @@ Predicted states `state_n` can be found under `output_path` folder. To convert t
 
 `merge2bed.sh genome_bin_file state_n output.bed`
 
+To visualize the bed file on the UCSC genome browser, additional BED fields should be added (with 9th column showing the color in RGB value). For example (header not included):
+
+| chrom  | chromStart|  chromEnd |name | score | strand | thickStart | thickEnd | itemRgb |
+|------|--------|--------|----------|------|--------|--------|----------|----------|
+|chr1  | 0      | 725000 | State_1  |0     |  .     |0       |725000 | 102,194,165 |
+|chr1  | 725000 | 875000 | State_2  |0     |  .     |725000  |875000 | 252,141,98  |
+|chr1  | 875000 | 2550000| State_3  |0     |  .     |875000  |2550000| 141,160,203 |
+|chr1  | 2550000| 2650000| State_2  |0     |  .     |2550000 |2650000| 252,141,98  |
+|chr1  | 2650000| 2800000| State_1  |0     |  .     |2650000 |2800000| 102,194,165 |
+|chr1  | 2800000| 2925000| State_2  |0     |  .     |2800000 |2925000| 252,141,98  |
+| ...  | ...    | ...    | ...      |...   | ...    | ...    |...    | ...         |
+
+An additional header must be added as the first line of the file in the following format: 
+
+`track name='<track_name>' description='<description>' itemRgb='On'`
+
+Or:
+
+`bedToBigBed output.bed chrom.sizes output.bb`
 
