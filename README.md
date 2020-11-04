@@ -69,9 +69,9 @@ The options:
 
 Example:
 
-`cd src
+`cd src`
 
-python main.py -i ../data/test_input_chr1.txt --hic ../data/test_Hi-C_chr1.txt -w 25000 -n 5 -o example_chr1 -g ../data/test_bin_chr1.bed --save`
+`python main.py -i ../data/test_input_chr1.txt --hic ../data/test_Hi-C_chr1.txt -w 25000 -n 5 -o example_chr1 -g ../data/test_bin_chr1.bed --save`
 
 Predicted states `state_5` can be found under `example_chr1` folder. To convert the results to bed format:
 
