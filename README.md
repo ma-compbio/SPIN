@@ -69,11 +69,12 @@ The options:
 
 Example:
 
-`python main.py -i input_chr1.txt --hic Hi-C_chr1.txt -w 25000 -n 5 -m <mode> -o example_chr1 -g bin_chr1.bed --save`
+`cd src
+python main.py -i ../data/test_input_chr1.txt --hic ../data/test_Hi-C_chr1.txt -w 25000 -n 5 -o example_chr1 -g ../data/test_bin_chr1.bed --save`
 
-Predicted states `state_n` can be found under `output_path` folder. To convert the results to bed format:
+Predicted states `state_5` can be found under `example_chr1` folder. To convert the results to bed format:
 
-`merge2bed.sh genome_bin_file state_n output.bed`
+`merge2bed.sh ../data/test_bin_chr1.bed state_5 output.bed`
 
 To visualize the bed file on the UCSC genome browser, additional BED fields should be added (with 9th column showing the color in RGB value). For example (header not included):
 
