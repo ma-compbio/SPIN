@@ -1,5 +1,5 @@
 # SPIN
-SPIN (Spatial Position Inference of the Nuclear genome) is a integrative computational method to identify genome-wide chromosome localization patterns relative to multiple nuclearcompartments using TSA-seq, DamID, and Hi-C data. 
+SPIN (Spatial Position Inference of the Nuclear genome) is an integrative computational method to identify genome-wide chromosome localization patterns relative to multiple nuclearcompartments using TSA-seq, DamID, and Hi-C data. 
 
 ## Required Packages
 SPIN requires the following Python packages to be installed:
