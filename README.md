@@ -112,9 +112,8 @@ Use the [bedToBigBed](http://hgdownload.soe.ucsc.edu/admin/exe/) utility to crea
 
 It is also recommended to use track bubs for more configurable custom annotations. See the [track hub](http://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html) help page for more information.
 
-![browser example](browser_example.jpg)
+<img src="browser_example.jpg" width="500">
 
 In addition, tracks can be visualized on [Nucleome Browser](https://vis.nucleome.org/entry/). See the [Nucleome Browser](http://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html) help page for more instructions.
 
-![nucleome browser example](NB_browser_example.jpg)
-
+<img src="NB_browser_example.jpg" width="500">
