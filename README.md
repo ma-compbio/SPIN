@@ -1,5 +1,5 @@
 # SPIN
-SPIN (Spatial Position Inference of the Nuclear genome) is an integrative computational method to identify genome-wide chromosome localization patterns relative to multiple nuclearcompartments using TSA-seq, DamID, and Hi-C data. 
+SPIN (Spatial Position Inference of the Nuclear genome) is a integrative computational method to identify genome-wide chromosome localization patterns relative to multiple nuclearcompartments using TSA-seq, DamID, and Hi-C data. 
 
 ## Required Packages
 SPIN requires the following Python packages to be installed:
@@ -53,7 +53,6 @@ The options:
 - -o \<output_path\> : Output path.
 
 - -g \<genome_bin\>: Genomic coordinates of each bin. `genome_bin` file should be a tab-separated text file where the first three columns are the genomic coordinates of each bin and the fourth column is the index number (starting from zero). For example (header not included):
-
 | chr    | start  |  end   |index number|
 |--------|--------|--------|----------|
 |chr1    |0       |25000   |0         |
@@ -69,13 +68,13 @@ The options:
 
 Example:
 
-`cd src`
+`python main.py -i input_chr1.txt --hic Hi-C_chr1.txt -w 25000 -n 5 -m <mode> -o example_chr1 -g bin_chr1.bed --save`
 
-`python main.py -i ../data/test_input_chr1.txt --hic ../data/test_Hi-C_chr1.txt -w 25000 -n 5 -o example_chr1 -g ../data/test_bin_chr1.bed --save`
+Predicted states `state_n` can be found under `output_path` folder. To convert the results to bed format:
 
-Predicted states `state_5` can be found under `example_chr1` folder. To convert the results to bed format:
+`merge2bed.sh genome_bin_file state_n output.bed`
 
-`merge2bed.sh ../data/test_bin_chr1.bed state_5 output.bed`
+## Visualization
 
 To visualize the bed file on the UCSC genome browser, additional BED fields should be added (with 9th column showing the color in RGB value). For example (header not included):
 
@@ -89,11 +88,22 @@ To visualize the bed file on the UCSC genome browser, additional BED fields shou
 |chr1  | 2800000| 2925000| State_2  |0     |  .     |2800000 |2925000| 252,141,98  |
 | ...  | ...    | ...    | ...      |...   | ...    | ...    |...    | ...         |
 
-An additional header must be added as the first line of the file in the following format: 
+It is recommended to use distinguishable colors for different states. For example:
+
+| State  | itemRgb   |
+|--------|-----------|
+|State_1 |228,26,28  |
+|State_2 |55,126,184 |
+|State_3 |77,175,74  |
+|State_4 |152,78,163 |
+|State_5 |255,127,0  |
+| ...    | ...       |
+
+To manually upload custom annotation tracks to UCSC genome browser, an additional header must be added as the first line of the file in the following format: 
 
 `track name='<track_name>' description='<description>' itemRgb='On'`
 
-Or:
+Then go to a UCSC genome browser view, click the "add custom tracks" or "manage custom tracks" button below the tracks window. On the Add Custom Tracks page, load the annotation track data or URL for your custom track into the upper text box and the track documentation (optional) into the lower text box, then click the "Submit" button. 
 
-`bedToBigBed output.bed chrom.sizes output.bb`
+
 
