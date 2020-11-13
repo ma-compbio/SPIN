@@ -77,17 +77,11 @@ Predicted states `state_n` can be found under `output_path` folder. To convert t
 
 ## Visualization
 
-To visualize the bed file on the UCSC genome browser, additional BED fields should be added (with 9th column showing the color in RGB value). For example (header not included):
+The bed file can be manually uploaded as custom annotation tracks to UCSC genome browser for visualization. An additional header must be added as the first line of the file in the following format: 
 
-| chrom  | chromStart|  chromEnd |name | score | strand | thickStart | thickEnd | itemRgb |
-|------|--------|--------|----------|------|--------|--------|----------|----------|
-|chr1  | 0      | 725000 | State_1  |0     |  .     |0       |725000 | 102,194,165 |
-|chr1  | 725000 | 875000 | State_2  |0     |  .     |725000  |875000 | 252,141,98  |
-|chr1  | 875000 | 2550000| State_3  |0     |  .     |875000  |2550000| 141,160,203 |
-|chr1  | 2550000| 2650000| State_2  |0     |  .     |2550000 |2650000| 252,141,98  |
-|chr1  | 2650000| 2800000| State_1  |0     |  .     |2650000 |2800000| 102,194,165 |
-|chr1  | 2800000| 2925000| State_2  |0     |  .     |2800000 |2925000| 252,141,98  |
-| ...  | ...    | ...    | ...      |...   | ...    | ...    |...    | ...         |
+`track name='<track_name>' description='<description>' itemRgb='On'`
+
+Then go to a UCSC genome browser view, click the "add custom tracks" or "manage custom tracks" button below the tracks window. On the Add Custom Tracks page, load the annotation track data or URL for your custom track into the upper text box and the track documentation (optional) into the lower text box, then click the "Submit" button. 
 
 It is recommended to use distinguishable colors for different states. For example:
 
@@ -100,11 +94,27 @@ It is recommended to use distinguishable colors for different states. For exampl
 |State_5 |255,127,0  |
 | ...    | ...       |
 
-To manually upload custom annotation tracks to UCSC genome browser, an additional header must be added as the first line of the file in the following format: 
+Additional BED fields can be added (with 9th column showing the color in RGB value). For example (header not included):
 
-`track name='<track_name>' description='<description>' itemRgb='On'`
+| chrom  | chromStart|  chromEnd |name | score | strand | thickStart | thickEnd | itemRgb |
+|------|--------|--------|----------|------|--------|--------|----------|----------|
+|chr1  | 0      | 725000 | State_1  |0     |  .     |0       |725000 | 102,194,165 |
+|chr1  | 725000 | 875000 | State_2  |0     |  .     |725000  |875000 | 252,141,98  |
+|chr1  | 875000 | 2550000| State_3  |0     |  .     |875000  |2550000| 141,160,203 |
+|chr1  | 2550000| 2650000| State_2  |0     |  .     |2550000 |2650000| 252,141,98  |
+|chr1  | 2650000| 2800000| State_1  |0     |  .     |2650000 |2800000| 102,194,165 |
+|chr1  | 2800000| 2925000| State_2  |0     |  .     |2800000 |2925000| 252,141,98  |
+| ...  | ...    | ...    | ...      |...   | ...    | ...    |...    | ...         |
 
-Then go to a UCSC genome browser view, click the "add custom tracks" or "manage custom tracks" button below the tracks window. On the Add Custom Tracks page, load the annotation track data or URL for your custom track into the upper text box and the track documentation (optional) into the lower text box, then click the "Submit" button. 
+Use the [bedToBigBed](http://hgdownload.soe.ucsc.edu/admin/exe/) utility to create a bigBed file.
+ 
+`bedToBigBed input.bed chrom.sizes myBigBed.bb`
 
+It is also recommended to use track bubs for more configurable custom annotations. See the [track hub](http://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html) help page for more information.
 
+![browser example](browser_example.jpg)
+
+In addition, tracks can be visualized on [Nucleome Browser](https://vis.nucleome.org/entry/). See the [Nucleome Browser](http://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html) help page for more instructions.
+
+![nucleome browser example](NB_browser_example.jpg)
 
