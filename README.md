@@ -120,7 +120,7 @@ In addition, tracks can be visualized on [Nucleome Browser](https://vis.nucleome
 
 ## Citation
 
-If you use SNIPER in your work
+If you use SPIN in your work
 
 ```
 @article{wang2020spin,
