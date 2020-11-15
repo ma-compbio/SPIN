@@ -117,3 +117,17 @@ It is also recommended to use track bubs for more configurable custom annotation
 In addition, tracks can be visualized on [Nucleome Browser](https://vis.nucleome.org/entry/). See the [Nucleome Browser](http://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html) help page for more instructions.
 
 <img src="NB_browser_example.jpg" width="500">
+
+## Citation
+
+If you use SNIPER in your work
+
+```
+@article{wang2020spin,
+  title={SPIN reveals genome-wide landscape of nuclear compartmentalization},
+  author={Wang, Yuchuan and Zhang, Yang and Zhang, Ruochi and van Schaik, Tom and Zhang, Liguo and Sasaki, Takayo and Peric-Hupkes, Daniel and Chen, Yu and Gilbert, David M and van Steensel, Bas and others},
+  journal={bioRxiv},
+  year={2020},
+  publisher={Cold Spring Harbor Laboratory}
+}
+```
