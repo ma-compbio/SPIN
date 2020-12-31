@@ -118,6 +118,10 @@ In addition, tracks can be visualized on [Nucleome Browser](https://vis.nucleome
 
 <img src="NB_browser_example.jpg" width="500">
 
+## Data Availability
+
+SPIN annotations for K562 can be found [here](https://drive.google.com/file/d/1gdwtrhTctddO9TCBXBaZpZFOAHWCUTli/view?usp=sharing).
+
 ## Citation
 
 If you use SPIN in your work
